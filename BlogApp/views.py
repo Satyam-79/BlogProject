@@ -26,3 +26,30 @@ def image_request(request):
   
 def success(request):
     return HttpResponse('successfully uploaded')
+
+def blogPage(request):
+    return render(request, "blog.html")
+
+def contactPage(request):
+    return render(request, "contact.html")
+
+def detailPage(request):
+    return render(request, "detail.html")
+
+def featurePage(request):
+    return render(request, "feature.html")
+
+def pricePage(request):
+    return render(request, "price.html")
+
+def quotePage(request):
+    return render(request, "quote.html")
+
+def servicePage(request):
+    return render(request, "service.html")
+
+def teamPage(request):
+    return render(request, "team.html")
+
+def testimonialPage(request):
+    return render(request, "testimonial.html")
