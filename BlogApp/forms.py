@@ -5,4 +5,4 @@ class UserImageForm(forms.ModelForm):
   
     class Meta:
         model = UploadImage
-        fields = '__all__'  
+        fields = '__all__'aditya
