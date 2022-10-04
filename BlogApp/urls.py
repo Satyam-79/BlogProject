@@ -8,4 +8,5 @@ urlpatterns = [
     path('success', views.success, name = 'success'),
     path('admin/', views.success, name = 'success'),
     
+    
 ]
