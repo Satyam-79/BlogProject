@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from . import templates
-from BlogApp.forms import UserImageForm  
+from BlogApp.forms import UserImageForm,NewUserForm
 from BlogApp.models import UploadImage
+from django.contrib.auth import login
+from django.contrib import messages
 
 
 def homePage(request):
@@ -53,3 +55,16 @@ def teamPage(request):
 
 def testimonialPage(request):
     return render(request, "testimonial.html")
+
+
+def register_request(request):
+	if request.method == "POST":
+		form = NewUserForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			# return redirect("homepage")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = NewUserForm()
+	return render (request=request, template_name="register.html", context={"register_form":form})
