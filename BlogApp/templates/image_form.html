@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hotel_image</title>
+    <title>uploadImage</title>
 </head>
 <body>
+    {% include 'includes/messages.html' %}
     <form method = "post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
