@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.contrib.auth.models import Group
 
 from BlogApp.forms import NewUserForm, UserImageForm
 from BlogApp.models import UploadImage
@@ -76,6 +77,8 @@ def register_request(request):
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            group = Group.objects.get(name='Authors')
+            user.groups.add(group)
             login(request, user)
             messages.success(request, f"{user.username} Registration Successful.")
             return HttpResponseRedirect(request.path_info)
