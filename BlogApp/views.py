@@ -26,7 +26,9 @@ def image_request(request):
 
         if form.is_valid():
             form.save()
-            return redirect('success')
+            messages.success(request, "Image Uploaded Successfully.")
+            return HttpResponseRedirect(request.path_info)
+            # return redirect('success')
     else:
         form = UserImageForm()
     return render(request, 'image_form.html', {'form': form})
@@ -80,7 +82,8 @@ def register_request(request):
             group = Group.objects.get(name='Authors')
             user.groups.add(group)
             login(request, user)
-            messages.success(request, f"{user.username} Registration Successful.")
+            messages.success(
+                request, f"{user.username} Registration Successful.")
             return HttpResponseRedirect(request.path_info)
             # return redirect("homepage")
             # return redirect('success')
@@ -108,3 +111,11 @@ def login_request(request):
             messages.error(request, "Invalid username or password.")
     form = AuthenticationForm()
     return render(request=request, template_name="newUser/login.html", context={"login_form": form})
+
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return HttpResponseRedirect(request.path_info)
+	# return redirect("main:homepage")
