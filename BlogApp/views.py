@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -84,7 +84,10 @@ def register_request(request):
             login(request, user)
             messages.success(
                 request, f"{user.username} Registration Successful.")
-            return HttpResponseRedirect(request.path_info)
+            if 'next' in request.POST:
+                    return redirect (request.POST.get('next'))
+            else:
+                return HttpResponseRedirect(request.path_info)
             # return redirect("homepage")
             # return redirect('success')
         messages.error(
@@ -103,7 +106,10 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}.")
-                return HttpResponseRedirect(request.path_info)
+                if 'next' in request.POST:
+                    return redirect (request.POST.get('next'))
+                else:
+                    return HttpResponseRedirect(request.path_info)
         # return redirect("/home")
             else:
                 messages.error(request, "Invalid username or password.")
@@ -115,7 +121,8 @@ def login_request(request):
 
 
 def logout_request(request):
+    redirect_to = request.GET.get('next', '')
     logout(request)
     messages.info(request, "You have successfully logged out.")
-    return HttpResponseRedirect(request.path_info)
+    return HttpResponseRedirect(redirect_to)
 	# return redirect("main:homepage")
