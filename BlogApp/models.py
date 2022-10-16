@@ -7,7 +7,6 @@ class UploadImage(models.Model):
     image = models.ImageField(upload_to='images')
 
 
-
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -17,8 +16,7 @@ class Tag(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, null=True)
-    slug = models.SlugField(null=True)
-    image = models.CharField(max_length=300, null=True, blank=True)
+    slug = models.SlugField(null=True, unique=True)
     description = models.CharField(
         max_length=500, null=True, blank=True, verbose_name='Description')
 
@@ -27,9 +25,8 @@ class Category(models.Model):
 
     def __str__(self):
         return str(self.name)
-    
-    
-    
+
+
 class Blog(models.Model):
     status = (
         ('active', 'active'),
@@ -37,7 +34,7 @@ class Blog(models.Model):
     )
 
     title = models.CharField(max_length=200, null=True)
-    slug = slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
     detail = models.TextField(max_length=2000, null=True)
     image = models.ImageField(upload_to='images/media', null=True, blank=True)
     #catagories = models.ManyToManyField(Category)
@@ -65,7 +62,7 @@ class Blog(models.Model):
             return self.image.url
 
     def __str__(self):
-        return f"{ self.title} | { self.author.author.username} | { self.catagories} | { self.status}"
+        return f"{ self.title} | { self.author.username} | { self.catagories} | { self.status}"
 
 
 class Comment(models.Model):
