@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import Group
 
 from BlogApp.forms import NewUserForm, UserImageForm
-from BlogApp.models import UploadImage
+from BlogApp.models import UploadImage , Blog
 
 from . import templates
 
@@ -39,7 +39,22 @@ def success(request):
 
 
 def blogPage(request):
-    return render(request, "website/blog.html")
+    featured_obj = Blog.objects.all().filter(status='active', visible=True,
+                                             featured=True).order_by('catagories', '-created_at')[:5]
+    post_obj = Blog.objects.all().order_by('catagories', '-created_at')
+    # As per Templates Views
+    # first_post = featured_obj.first()
+    # s_post = featured_obj[1]
+    # last_post = featured_obj[2:]
+    context = {
+        'post': post_obj,
+        'f_post': featured_obj,
+        'list': [1]
+        # 'first': first_post,
+        # 's_post': s_post,
+        # 'last_post': last_post
+    }
+    return render(request, "website/blog.html", context)
 
 
 def contactPage(request):
@@ -85,7 +100,7 @@ def register_request(request):
             messages.success(
                 request, f"{user.username} Registration Successful.")
             if 'next' in request.POST:
-                    return redirect (request.POST.get('next'))
+                return redirect(request.POST.get('next'))
             else:
                 return HttpResponseRedirect(request.path_info)
             # return redirect("homepage")
@@ -104,10 +119,11 @@ def login_request(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
+
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}.")
                 if 'next' in request.POST:
-                    return redirect (request.POST.get('next'))
+                    return redirect(request.POST.get('next'))
                 else:
                     return HttpResponseRedirect(request.path_info)
         # return redirect("/home")
@@ -119,10 +135,9 @@ def login_request(request):
     return render(request=request, template_name="newUser/login.html", context={"login_form": form})
 
 
-
 def logout_request(request):
     redirect_to = request.GET.get('next', '')
     logout(request)
     messages.info(request, "You have successfully logged out.")
     return HttpResponseRedirect(redirect_to)
-	# return redirect("main:homepage")
+    # return redirect("main:homepage")

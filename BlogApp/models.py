@@ -36,7 +36,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=200, null=True)
     slug = models.SlugField(max_length=200, unique=True)
     detail = models.TextField(max_length=2000, null=True)
-    image = models.ImageField(upload_to='images/media', null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     #catagories = models.ManyToManyField(Category)
     catagories = models.ForeignKey(
         Category, on_delete=models.DO_NOTHING, null=True)
